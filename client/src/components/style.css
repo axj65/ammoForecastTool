@@ -54,7 +54,7 @@ body {
   padding: 5px 10px; /* Add padding to create space around the text */
   border-radius: 5px; /* Add rounded corners to the border */
   color: black !important; /* Change text color */
-  background-color: yellow;
+  background-color: #FFD130;
   font-weight: normal !important;
 
 }
@@ -127,20 +127,20 @@ body {
 }
 
 .btn:hover {
-  background-color: yellow;
+  background-color: #FFD130;
   border: 2px solid black;
   color: black;
 }
 
 .btn:focus, .btn:active {
-  background-color: yellow;
+  background-color: #FFD130;
   border: 2px solid black;
   outline: none; /* Remove the default focus outline */
   box-shadow: none; /* Remove the default focus box-shadow */
 }
 
 .btn-active {
-  background-color: yellow; /* This style will be applied to the active button */
+  background-color: #FFD130; /* This style will be applied to the active button */
 }
 
 /* Form Section */
@@ -166,3 +166,47 @@ body {
   padding: 10px;
   background-color: #edeade;
 }
+
+
+
+
+/*The below part are for login and registration page*/
+
+body {
+  justify-content: center;
+  height: 80vh;
+}
+
+
+input {
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+  width: 100%;
+  padding: 13px; /* padding for the username and password field */
+  margin-bottom: 20px;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+}
+
+/* .button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+} */
+
+
+.submit-button {
+  background-color: #C7C7C7; /* Set the initial background color */
+  color: #000; /* Set the text color */
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Add a smooth transition effect */
+}
+
+.submit-button:hover {
+  background-color: #FFD130; /* Change the background color to yellow on hover */
+  color: #000; /* Change the text color on hover */
+}
+
+/*The above part are for login and registration page*/
