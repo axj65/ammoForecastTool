@@ -18,8 +18,9 @@ async function run() {
     client.db("admin").command({ ping: 1 });   
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
-    // if database does not exist, create a database called eCommerce
+    // if database does not exist, create a database called ammoForecastTool
     dataBase = client.db('ammoForecastTool');
+
 
     const users = [
     {image: "/images/denim_jacket.jpeg", title:"denim jacket", price:"$69.99"},

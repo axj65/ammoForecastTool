@@ -1,78 +1,68 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
-import "bootstrap/dist/css/bootstrap.css";
-//import "bootstrap/dist/css/bootstrap.min.css";
- 
-export default function Login() {
- const [form, setForm] = useState({
-   email: "",
-   password: "",
- });
- const navigate = useNavigate();
- 
- // These methods will update the state properties.
- function updateForm(value) {
-   return setForm((prev) => {
-     return { ...prev, ...value };
-   });
- }
- 
- // This function will handle the submission.
- async function onSubmit(e) {
-   e.preventDefault();
- 
-   // When a post request is sent to the create url, we'll add a new record to the database.
-   const loginCredentials = { ...form };
- 
-   await fetch("http://localhost:5050/login", {
-     method: "POST",
-     headers: {
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify(loginCredentials),
-   })
-   .catch(error => {
-     window.alert(error);
-     return;
-   });
- 
-   setForm({ email: "", password: "" });
-   navigate("/");
- }
- 
- // This following section will display the form that takes the input from the user.
- return (
-   <div className="container text-center">
-     <h3>Login</h3>
-     <form onSubmit={onSubmit}>
-       <div className="form-group">
-         <label htmlFor="email">Email</label>
-         <input
-           type="text"
-           className="form-control"
-           id="email"
-           value={form.email}
-           onChange={(e) => updateForm({ email: e.target.value })}
-         />
-       </div>
-       <div className="form-group">
-         <label htmlFor="password">Password</label>
-         <input
-           type="password"
-           className="form-control"
-           id="password"
-           value={form.password}
-           onChange={(e) => updateForm({ password: e.target.value })}
-         />
-       </div>
-       <div className="form-group">
-         <input
-           type="submit"
-           value="Login"
-           className="btn btn-primary"
-         />
-       </div>
-     </form>
-   </div>
- );
+
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { useNavigate, Link } from "react-router-dom"
+
+
+function Login() {
+
+    const history=useNavigate();
+
+    const [email,setEmail]=useState('')
+    const [password,setPassword]=useState('')
+
+    async function submit(e){
+        e.preventDefault();
+
+        try{
+
+            await axios.post("http://localhost:5050/",{
+                email,password
+            })
+            .then(res=>{
+                if(res.data=="exist"){
+                    history("/home",{state:{id:email}})
+                }
+                else if(res.data=="notexist"){
+                    alert("User have not signed up")
+                }
+            })
+            .catch(e=>{
+                alert("wrong details")
+                console.log(e);
+            })
+
+        }
+        catch(e){
+            console.log(e);
+
+        }
+
+    }
+
+
+    return (
+        <div className="login">
+
+            <h2>Login</h2>
+
+            <form action="POST">
+                <input type="email" onChange={(e) => { setEmail(e.target.value) }} placeholder="Email"  />
+                <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password"  />
+                <input type="submit" onClick={submit} className="submit-button" />
+
+            </form>
+
+            <br />
+            <p>Don't have an account?     <Link to="/register">Sign Up for Free</Link></p>
+            <br />
+
+            
+
+        </div>
+    )
 }
+
+export default Login
+
+
