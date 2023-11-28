@@ -3,13 +3,19 @@ const path = require('path');
 const session = require('express-session');
 const nodemailer=require('nodemailer');
 const sha256 = require('sha256');
-
+const crypto = require('crypto');
 const { ObjectId } = require('mongodb');
+// Define your token expiration duration (in milliseconds)
+const TOKEN_EXPIRATION_DURATION = 3600000; // e.g. 1 hour
+
+
+
+
 
 // The router will be added as a middleware and will take control of requests starting with path /record.
 const appRouter = express.Router();
+const resetTokens = new Map();
 appRouter.use(express.json());
-
 appRouter.use(session({secret: "Your secret key", resave: false, saveUninitialized: false}));
 
 //var session;
@@ -185,10 +191,99 @@ appRouter.route("/login").post(async function (req, response) {
 
 
 
+//rouute for reset password
+// Serve React application for reset-password route
+appRouter.get("/reset-password/:resetToken", (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'client', 'build', 'index.html'));
+});
+
+// Function to send the reset password email
+async function sendResetPasswordEmail(email, resetToken) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'ziyiwang919@gmail.com',
+        pass: 'bxakuahuugsorjxg'
+      }
+    });
+
+    resetTokens.set(email, { token: resetToken, expirationTime: Date.now() + TOKEN_EXPIRATION_DURATION });
+
+    const mailOptions = {
+      from: 'ziyiwang919@gmail.com',
+      to: email,
+      subject: 'Password Reset',
+      text: `Click the following link to reset your password: http://localhost:5050/reset-password/${resetToken}`
+    };
+    
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log(`Reset password email sent to ${email}. Message ID: ${info.messageId}`);
+  } catch (error) {
+    console.error('Error sending reset password email:', error.message);
+    throw error;
+  }
+}
+
+// Route for initiating password reset
+appRouter.post("/reset-password", async (req, res) => {
+  try {
+    const db_connect = await dbo.getDb();
+    const { email } = req.body;
+
+    const user = await db_connect.collection("customers").findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const tokenExpirationTime = Date.now() + TOKEN_EXPIRATION_DURATION;
+    await sendResetPasswordEmail(email, resetToken);
+
+    res.json({ message: "Reset password email sent successfully!" });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: "Error sending reset password email", error: error.message });
+  }
+});
+
+// Route for handling password reset
+appRouter.post("/reset-password/:resetToken", async (req, res) => {
+  try {
+    const db_connect = await dbo.getDb();
+    const providedResetToken = req.params.resetToken;
+    const newPassword = req.body.newPassword;
+    const userEmail = req.body.email;
+
+    const tokenInfo = resetTokens.get(userEmail);
+
+    if (!tokenInfo || tokenInfo.token !== providedResetToken || tokenInfo.expirationTime < Date.now()) {
+      return res.status(401).json({ message: "Invalid or expired reset token" });
+    }
+
+    const hashedNewPassword = sha256(newPassword);
+    await db_connect.collection("customers").updateOne(
+      { email: userEmail },
+      { $set: { password: hashedNewPassword } }
+    );
+
+    resetTokens.delete(userEmail);
+
+    res.json({ message: "Password reset successfully!" });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: "Error resetting password", error: error.message });
+  }
+});
+
+
+
 // Route to save event data
 appRouter.post('/saveEvent', async function (req, res) {
   try {
-    let db_connect = dbo.getDb();
+    let db_connect = await dbo.getDb(); // Ensure db_connect is properly initialized
     
     // Ensure that userId is included in the request body
     if (!req.body.userId) {

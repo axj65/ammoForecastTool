@@ -16,6 +16,8 @@ import Table from "./components/table";
 import Myevents from "./components/myevents";
 import SaveEvent from "./components/saveEvent";
 import Faq from "./components/faq";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 const App = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -82,6 +84,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/saveEvent" element={<SaveEvent />} />
             <Route path="/faq" element={<Faq />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
         </Routes>
         </div>
      </div>
