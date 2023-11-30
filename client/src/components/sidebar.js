@@ -93,7 +93,7 @@ export default function Sidebar({ onLogout }) {
           </NavLink>
         </li>
         <li className="mb-2">
-          <a href="/../index_home.html#contact-bg">
+          <a href="../index.html#contact-bg">
             <BiSend size={24} style={{ marginRight: `${spacing}em` }} />
             <span>Contact Us</span>
           </a>

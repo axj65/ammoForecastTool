@@ -66,7 +66,7 @@ function SaveEvent() {
     };
 
     try {
-      const response = await fetch('http://localhost:5050/saveEvent', {
+      const response = await fetch('/saveEvent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
