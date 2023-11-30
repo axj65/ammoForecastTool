@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import './style.css';
+
+import configData from "../config.json";
+
 const sha256 = require('sha256');
 
 export default function Login({ onLogin }) {

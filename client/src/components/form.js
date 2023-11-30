@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import ProgressBar from "./progressbar-form";
 
+import configData from "../config.json";
+
 const weaponTypes = {
   individual: ["M4", "M249", "M17", "M110", "M2010", "M107"],
   groundCrew: ["M240", "M2", "MK19"],
@@ -59,7 +61,7 @@ function Form() {
         number: numberToTrain
       };
   
-      const response = await fetch('/api/query', {
+      const response = await fetch(configData.SERVER_URL+"/api/query", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
