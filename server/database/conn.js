@@ -1,8 +1,5 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://axj65:hookem@cluster0.hk0fply.mongodb.net/?retryWrites=true&w=majority"; //change uri to uri from mongoDB
-
-//ziyi uri = “mongodb+srv://ziyiwang:Shi300%40siwuxie@cluster0.9115lzh.mongodb.net/?retryWrites=true&w=majority”
-//albert uri = "mongodb+srv://axj65:hookem@cluster0.hk0fply.mongodb.net/?retryWrites=true&w=majority"
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const uri = process.env.ATLAS_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -10,21 +7,22 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 var dataBase;
 
 module.exports = {
+  connectToServer: async function () {
+    client.connect();
 
-connectToServer: async function() {
-   client.connect();
-    
-   // Send a ping to confirm a successful connection
-    client.db("admin").command({ ping: 1 });   
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    dataBase = client.db('ammoForecastTool');
+    // Send a ping to confirm a successful connection
+    client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+    dataBase = client.db("ammoForecastTool");
 
-/*
+    /*
     // Create collection for individual qualifications
     const individualQualifications = [
       { eventType: 'M4 Day', ammoType: '5.56 Ball', data: { TIV: 45, TV: 40, TVI: 40, Total: 125 } },
@@ -72,8 +70,8 @@ connectToServer: async function() {
     dataBase.collection("users").insertMany(users);
 
 */
-    
-    // select all documents in collection 
+
+    // select all documents in collection
     //const savedEvents= await dataBase.collection("savedEvents").find().toArray();
     //show results
     //console.log(savedEvents);
@@ -81,18 +79,16 @@ connectToServer: async function() {
     // find user with email "albertjoe@utexas.edu"
     //const find_1 = await dataBase.collection("users").find({ email: "albertjoe@utexas.edu" }).toArray();
     //console.log(find_1);
-    
+
     //delete user with email "email5"
     //dataBase.collection("users").deleteOne({ email: "email5" });
     // now show it is deleted
     //const users= await dataBase.collection("users").find().toArray();
     //show results
     //console.log(users);
+  },
 
-
-},
-
-getDb: function() {
+  getDb: function () {
     return dataBase;
   },
 };
