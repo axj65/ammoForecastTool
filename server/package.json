@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build":"react-scripts build",
-    "test": "jest tests/"
+    "test": "jest tests/",
+    "start": "node server.js"
   }
 }
