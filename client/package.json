@@ -1,8 +1,9 @@
 {
   "name": "client",
-  "homepage":"https://inf385t-vfes.vercel.app",
+  "homepage":"/app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://localhost:5050",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

@@ -3,8 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import './style.css';
 
-import configData from "../config.json";
-
 const sha256 = require('sha256');
 
 export default function Login({ onLogin }) {
@@ -30,7 +28,7 @@ async function onSubmit(e) {
   };
 
   try {
-    const response = await fetch(configData.SERVER_URL+"/login", {
+    const response = await fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

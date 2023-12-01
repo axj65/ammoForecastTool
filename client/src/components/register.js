@@ -3,8 +3,6 @@ import { useNavigate } from "react-router";
 import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
 
-import configData from "../config.json";
-
 //import bcrypt from "bcryptjs"; // Import bcryptjs
 
 
@@ -41,7 +39,7 @@ export default function Register() {
       };
       
       try {
-        const response = await fetch(configData.SERVER_URL+"/register", {
+        const response = await fetch("/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
